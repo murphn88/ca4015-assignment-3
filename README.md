@@ -10,4 +10,4 @@ Artist Recommender System using Last.fm [data](https://grouplens.org/datasets/he
 ## Jupyter Book:
 
 
-The Jupyter Book for this assingment is hosted [here]().
+The Jupyter Book for this assingment is hosted [here](https://murphn88.github.io/ca4015-assignment-3).
