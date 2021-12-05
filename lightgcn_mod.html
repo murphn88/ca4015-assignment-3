@@ -1,0 +1,997 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>4. LightGCN &#8212; Artist Recommender System</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="5. Content-Based Recommender" href="content_based.html" />
+    <link rel="prev" title="3. Softmax model" href="softmax.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Artist Recommender System</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="introd.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Methodology
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="data_description.html">
+   1. Data Exploration &amp; Pre-Processing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="matrix_fact.html">
+   2. Matrix Factorization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="softmax.html">
+   3. Softmax model
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   4. LightGCN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="content_based.html">
+   5. Content-Based Recommender
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Conclusion.html">
+   6. Conclusion
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bib.html">
+   7. Bibliography
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/lightgcn_mod.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Flightgcn_mod.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/lightgcn_mod.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#outline">
+   4.1. Outline
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#lightgcn-overview-architecture">
+   4.2. LightGCN Overview &amp; Architecture
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#light-graph-convolution-lgc">
+     4.2.1. Light Graph Convolution (LGC)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#layer-combination-and-model-prediction">
+     4.2.2. Layer Combination and Model Prediction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#matrix-form">
+     4.2.3. Matrix Form
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#model-training">
+     4.2.4. Model Training
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#import-required-packages">
+   4.3. Import required packages
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#read-in-data-set-parameters">
+   4.4. Read in Data &amp; Set Parameters
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#lightgcn-implementation">
+   4.5. LightGCN Implementation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#split-data">
+     4.5.1. Split Data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#process-data">
+     4.5.2. Process data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#prepare-hyper-parameters">
+     4.5.3. Prepare hyper-parameters
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-and-train-model">
+     4.5.4. Create and train model
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#recommendations">
+     4.5.5. Recommendations
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#evaluation">
+     4.5.6. Evaluation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   4.6. Conclusion
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="lightgcn">
+<h1><span class="section-number">4. </span>LightGCN<a class="headerlink" href="#lightgcn" title="Permalink to this headline">¶</a></h1>
+<p>Graphs are versatile data strucutres that can model complex elements and relationships. In this chapter I implement a Light Graph Convolution Network (LightGNC) to make recommendations. This work utilises a recommender library developed by Microsoft, instructions on installation can be found <a class="reference external" href="https://github.com/microsoft/recommenders">here</a>. The library provides utilities to aid common recommendation building tasks such as data cleaning, test/train splitting and the implementation of algorithms.</p>
+<div class="section" id="outline">
+<h2><span class="section-number">4.1. </span>Outline<a class="headerlink" href="#outline" title="Permalink to this headline">¶</a></h2>
+<ol class="simple">
+<li><p>Overview of LightGCN</p></li>
+<li><p>Prepare data and hyper-parameters</p></li>
+<li><p>Create and train model¶</p></li>
+<li><p>Recommendations and evaluation¶</p></li>
+</ol>
+</div>
+<div class="section" id="lightgcn-overview-architecture">
+<h2><span class="section-number">4.2. </span>LightGCN Overview &amp; Architecture<a class="headerlink" href="#lightgcn-overview-architecture" title="Permalink to this headline">¶</a></h2>
+<p>Graph Convolution Network (GCNs) approaches involve semi-supervised learning on graph-structured data. Many real-world datasets come in the form of property graphs, yet until recently little effort has been devoted to the generalization of neural network models to graph structured datasets. GCNs are based on an efficient variant of convolutional neural networks. Convolutional architecure allow the to scale linearly and learn hidden layer representations.</p>
+<p>LightGCN is a simplified design of GCN, more concise and appropriate for recommenders. The model architecture is illustrated below.</p>
+<img src="https://recodatasets.z20.web.core.windows.net/images/lightGCN-model.jpg" width="600">
+<p>In Light Graph Convolution, only the normalized sum of neighbor embeddings is performed towards next layer; other operations like self-connection, feature transformation, and nonlinear activation are all removed, which largely simplifies GCNs. In Layer Combination,the embeddings at each layer are summed over to achieve the final representations.</p>
+<div class="section" id="light-graph-convolution-lgc">
+<h3><span class="section-number">4.2.1. </span>Light Graph Convolution (LGC)<a class="headerlink" href="#light-graph-convolution-lgc" title="Permalink to this headline">¶</a></h3>
+<p>In LightGCN, a simple weighted sum aggregator is utilised. The graph convolution operation in LightGCN is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{array}{l}
+\mathbf{e}_{u}^{(k+1)}=\sum_{i \in \mathcal{N}_{u}} \frac{1}{\sqrt{\left|\mathcal{N}_{u}\right|} \sqrt{\left|\mathcal{N}_{i}\right|}} \mathbf{e}_{i}^{(k)} \\
+\mathbf{e}_{i}^{(k+1)}=\sum_{u \in \mathcal{N}_{i}} \frac{1}{\sqrt{\left|\mathcal{N}_{i}\right|} \sqrt{\left|\mathcal{N}_{u}\right|}} \mathbf{e}_{u}^{(k)}
+\end{array}
+\end{split}\]</div>
+<p>The symmetric normalization term <span class="math notranslate nohighlight">\(\frac{1}{\sqrt{\left|\mathcal{N}_{u}\right|} \sqrt{\left|\mathcal{N}_{i}\right|}}\)</span> follows the design of standard GCN, which can avoid the scale of embeddings increasing with graph convolution operations.</p>
+</div>
+<div class="section" id="layer-combination-and-model-prediction">
+<h3><span class="section-number">4.2.2. </span>Layer Combination and Model Prediction<a class="headerlink" href="#layer-combination-and-model-prediction" title="Permalink to this headline">¶</a></h3>
+<p>The embeddings at the 0-th layer are the only trainable parameters, i.e., <span class="math notranslate nohighlight">\(\mathbf{e}_{u}^{(0)}\)</span> for all users and <span class="math notranslate nohighlight">\(\mathbf{e}_{i}^{(0)}\)</span> for all items. After <span class="math notranslate nohighlight">\(K\)</span> layer, the embeddings are further combined at each layer to arrive at the final representation of a user (an item):</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{e}_{u}=\sum_{k=0}^{K} \alpha_{k} \mathbf{e}_{u}^{(k)} ; \quad \mathbf{e}_{i}=\sum_{k=0}^{K} \alpha_{k} \mathbf{e}_{i}^{(k)}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha_{k} \geq 0\)</span> denotes the importance of the <span class="math notranslate nohighlight">\(k\)</span>-th layer embedding in constituting the final embedding. In our experiments, we set <span class="math notranslate nohighlight">\(\alpha_{k}\)</span> uniformly as <span class="math notranslate nohighlight">\(1 / (K+1)\)</span>.</p>
+<p>The model prediction is defined as the inner product of user and item final representations:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{y}_{u i}=\mathbf{e}_{u}^{T} \mathbf{e}_{i}
+\]</div>
+<p>which is used as the ranking score for recommendation generation.</p>
+</div>
+<div class="section" id="matrix-form">
+<h3><span class="section-number">4.2.3. </span>Matrix Form<a class="headerlink" href="#matrix-form" title="Permalink to this headline">¶</a></h3>
+<p>Let the user-item interaction matrix be <span class="math notranslate nohighlight">\(\mathbf{R} \in \mathbb{R}^{M \times N}\)</span> where <span class="math notranslate nohighlight">\(M\)</span> and <span class="math notranslate nohighlight">\(N\)</span> denote the number of users and items, respectively, and each entry <span class="math notranslate nohighlight">\(R_{ui}\)</span> is 1 if <span class="math notranslate nohighlight">\(u\)</span> has interacted with item <span class="math notranslate nohighlight">\(i\)</span> otherwise 0. The adjacency matrix of the user-item graph is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\mathbf{A}=\left(\begin{array}{cc}
+\mathbf{0} &amp; \mathbf{R} \\
+\mathbf{R}^{T} &amp; \mathbf{0}
+\end{array}\right)
+\end{split}\]</div>
+<p>Let the 0-th layer embedding matrix be <span class="math notranslate nohighlight">\(\mathbf{E}^{(0)} \in \mathbb{R}^{(M+N) \times T}\)</span>, where <span class="math notranslate nohighlight">\(T\)</span> is the embedding size. Then we can obtain the matrix equivalent form of LGC as:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{E}^{(k+1)}=\left(\mathbf{D}^{-\frac{1}{2}} \mathbf{A} \mathbf{D}^{-\frac{1}{2}}\right) \mathbf{E}^{(k)}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{D}\)</span> is a <span class="math notranslate nohighlight">\((M+N) \times(M+N)\)</span> diagonal matrix, in which each entry <span class="math notranslate nohighlight">\(D_{ii}\)</span> denotes the number of nonzero entries in the <span class="math notranslate nohighlight">\(i\)</span>-th row vector of the adjacency matrix <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> (also named as degree matrix). Lastly, we get the final embedding matrix used for model prediction as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\mathbf{E} &amp;=\alpha_{0} \mathbf{E}^{(0)}+\alpha_{1} \mathbf{E}^{(1)}+\alpha_{2} \mathbf{E}^{(2)}+\ldots+\alpha_{K} \mathbf{E}^{(K)} \\
+&amp;=\alpha_{0} \mathbf{E}^{(0)}+\alpha_{1} \tilde{\mathbf{A}} \mathbf{E}^{(0)}+\alpha_{2} \tilde{\mathbf{A}}^{2} \mathbf{E}^{(0)}+\ldots+\alpha_{K} \tilde{\mathbf{A}}^{K} \mathbf{E}^{(0)}
+\end{aligned}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\tilde{\mathbf{A}}=\mathbf{D}^{-\frac{1}{2}} \mathbf{A} \mathbf{D}^{-\frac{1}{2}}\)</span> is the symmetrically normalized matrix.</p>
+</div>
+<div class="section" id="model-training">
+<h3><span class="section-number">4.2.4. </span>Model Training<a class="headerlink" href="#model-training" title="Permalink to this headline">¶</a></h3>
+<p>Bayesian Personalized Ranking (BPR) loss is used. BPR is a a pairwise loss that encourages the prediction of an observed entry to be higher than its unobserved counterparts:</p>
+<div class="math notranslate nohighlight">
+\[
+L_{B P R}=-\sum_{u=1}^{M} \sum_{i \in \mathcal{N}_{u}} \sum_{j \notin \mathcal{N}_{u}} \ln \sigma\left(\hat{y}_{u i}-\hat{y}_{u j}\right)+\lambda\left\|\mathbf{E}^{(0)}\right\|^{2}
+\]</div>
+<p>Where <span class="math notranslate nohighlight">\(\lambda\)</span> controls the <span class="math notranslate nohighlight">\(L_2\)</span> regularization strength.</p>
+</div>
+</div>
+<div class="section" id="import-required-packages">
+<h2><span class="section-number">4.3. </span>Import required packages<a class="headerlink" href="#import-required-packages" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">papermill</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="kn">import</span> <span class="nn">scrapbook</span> <span class="k">as</span> <span class="nn">sb</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s1">&#39;ERROR&#39;</span><span class="p">)</span> <span class="c1"># only show error messages</span>
+
+<span class="kn">from</span> <span class="nn">recommenders.utils.timer</span> <span class="kn">import</span> <span class="n">Timer</span>
+<span class="kn">from</span> <span class="nn">recommenders.models.deeprec.models.graphrec.lightgcn</span> <span class="kn">import</span> <span class="n">LightGCN</span>
+<span class="kn">from</span> <span class="nn">recommenders.models.deeprec.DataModel.ImplicitCF</span> <span class="kn">import</span> <span class="n">ImplicitCF</span>
+<span class="kn">from</span> <span class="nn">recommenders.datasets</span> <span class="kn">import</span> <span class="n">movielens</span>
+<span class="kn">from</span> <span class="nn">recommenders.datasets.python_splitters</span> <span class="kn">import</span> <span class="n">python_stratified_split</span>
+<span class="kn">from</span> <span class="nn">recommenders.evaluation.python_evaluation</span> <span class="kn">import</span> <span class="n">map_at_k</span><span class="p">,</span> <span class="n">ndcg_at_k</span><span class="p">,</span> <span class="n">precision_at_k</span><span class="p">,</span> <span class="n">recall_at_k</span>
+<span class="kn">from</span> <span class="nn">recommenders.utils.constants</span> <span class="kn">import</span> <span class="n">SEED</span> <span class="k">as</span> <span class="n">DEFAULT_SEED</span>
+<span class="kn">from</span> <span class="nn">recommenders.models.deeprec.deeprec_utils</span> <span class="kn">import</span> <span class="n">prepare_hparams</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="read-in-data-set-parameters">
+<h2><span class="section-number">4.4. </span>Read in Data &amp; Set Parameters<a class="headerlink" href="#read-in-data-set-parameters" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">listens</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;.</span><span class="se">\\</span><span class="s1">data</span><span class="se">\\</span><span class="s1">processed</span><span class="se">\\</span><span class="s1">listens.csv&#39;</span><span class="p">,</span><span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">artists</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;.</span><span class="se">\\</span><span class="s1">data</span><span class="se">\\</span><span class="s1">processed</span><span class="se">\\</span><span class="s1">artists.csv&#39;</span><span class="p">,</span><span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">artist_dict</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">artists</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="n">artists</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">listens</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>userID</th>
+      <th>artistID</th>
+      <th>listenCount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>45</td>
+      <td>3.047442</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>46</td>
+      <td>3.047442</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>47</td>
+      <td>3.047442</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># top k items to recommend</span>
+<span class="n">TOP_K</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">LISTENS_DATA_SIZE</span> <span class="o">=</span> <span class="s1">&#39;100k&#39;</span>
+
+<span class="c1"># Model parameters</span>
+<span class="n">EPOCHS</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">1024</span>
+
+<span class="n">SEED</span> <span class="o">=</span> <span class="n">DEFAULT_SEED</span>  <span class="c1"># Set None for non-deterministic results</span>
+
+<span class="n">yaml_file</span> <span class="o">=</span> <span class="s2">&quot;./lightgcn.yaml&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="lightgcn-implementation">
+<h2><span class="section-number">4.5. </span>LightGCN Implementation<a class="headerlink" href="#lightgcn-implementation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="split-data">
+<h3><span class="section-number">4.5.1. </span>Split Data<a class="headerlink" href="#split-data" title="Permalink to this headline">¶</a></h3>
+<p>We split the full dataset into a train and test dataset to evaluate performance of the algorithm against a held-out set not seen during training. Because SAR generates recommendations based on user preferences, all users that are in the test set must also exist in the training set. We can use the provided python_stratified_split function which holds out a percentage of items from each user, but ensures all users are in both train and test datasets. We will use a 75/25 train/test split. I considered keeping the split at for consistency with the matrix factorization and softmax models. However,this method relies heavily on users’ historic listening records and is being split in a different manner so I decided against it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">listens</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;listenCount&#39;</span><span class="p">:</span> <span class="s1">&#39;rating&#39;</span><span class="p">,</span> <span class="s1">&#39;artistID&#39;</span><span class="p">:</span><span class="s1">&#39;itemID&#39;</span><span class="p">})</span>
+<span class="c1"># listens[&#39;timestamp&#39;] = np.nan</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>userID</th>
+      <th>itemID</th>
+      <th>rating</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>45</td>
+      <td>3.047442</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>46</td>
+      <td>3.047442</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>47</td>
+      <td>3.047442</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>48</td>
+      <td>3.047442</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>49</td>
+      <td>3.047442</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">python_stratified_split</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="process-data">
+<h3><span class="section-number">4.5.2. </span>Process data<a class="headerlink" href="#process-data" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ImplicitCF</span></code> is a class that intializes and loads data for the training process. During the initialization of this class, user IDs and item IDs are reindexed, ratings greater than zero are converted into implicit positive interaction, and an adjacency matrix of the user-item graph is created.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">ImplicitCF</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="n">test</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">SEED</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="prepare-hyper-parameters">
+<h3><span class="section-number">4.5.3. </span>Prepare hyper-parameters<a class="headerlink" href="#prepare-hyper-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Parameters can be set for ths LightGNC. To save time on tuning parameters we will use the prepared paramemters that can be found in <code class="docutils literal notranslate"><span class="pre">yaml_file</span></code>. <code class="docutils literal notranslate"><span class="pre">prepare_hparams</span></code> reads in the yaml file and prepares a full set of parameters for the model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hparams</span> <span class="o">=</span> <span class="n">prepare_hparams</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">,</span>
+                          <span class="n">n_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                          <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span>
+                          <span class="n">epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span>
+                          <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span>
+                          <span class="n">eval_epoch</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                          <span class="n">top_k</span><span class="o">=</span><span class="n">TOP_K</span><span class="p">,</span>
+                         <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="create-and-train-model">
+<h3><span class="section-number">4.5.4. </span>Create and train model<a class="headerlink" href="#create-and-train-model" title="Permalink to this headline">¶</a></h3>
+<p>With data and parameters prepared, we can create and train the LightGCN model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LightGCN</span><span class="p">(</span><span class="n">hparams</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">SEED</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Already create adjacency matrix.
+Already normalize adjacency matrix.
+Using xavier initialization.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Timer</span><span class="p">()</span> <span class="k">as</span> <span class="n">train_time</span><span class="p">:</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Took </span><span class="si">{}</span><span class="s2"> seconds for training.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">train_time</span><span class="o">.</span><span class="n">interval</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1 (train)9.2s: train loss = 0.42353 = (mf)0.42337 + (embed)0.00016
+Epoch 2 (train)9.1s: train loss = 0.19883 = (mf)0.19836 + (embed)0.00047
+Epoch 3 (train)8.4s: train loss = 0.15302 = (mf)0.15242 + (embed)0.00059
+Epoch 4 (train)9.4s: train loss = 0.12323 = (mf)0.12253 + (embed)0.00070
+Epoch 5 (train)8.7s + (eval)1.1s: train loss = 0.10586 = (mf)0.10505 + (embed)0.00080, recall = 0.09133, ndcg = 0.11955, precision = 0.10797, map = 0.04692
+Epoch 6 (train)9.0s: train loss = 0.09377 = (mf)0.09288 + (embed)0.00089
+Epoch 7 (train)9.1s: train loss = 0.08220 = (mf)0.08122 + (embed)0.00099
+Epoch 8 (train)8.5s: train loss = 0.07451 = (mf)0.07344 + (embed)0.00107
+Epoch 9 (train)8.6s: train loss = 0.06745 = (mf)0.06629 + (embed)0.00116
+Epoch 10 (train)8.7s + (eval)0.9s: train loss = 0.05959 = (mf)0.05835 + (embed)0.00124, recall = 0.11003, ndcg = 0.14639, precision = 0.13027, map = 0.05780
+Epoch 11 (train)9.1s: train loss = 0.05491 = (mf)0.05359 + (embed)0.00132
+Epoch 12 (train)8.5s: train loss = 0.04991 = (mf)0.04851 + (embed)0.00139
+Epoch 13 (train)8.7s: train loss = 0.04857 = (mf)0.04710 + (embed)0.00147
+Epoch 14 (train)8.7s: train loss = 0.04412 = (mf)0.04257 + (embed)0.00154
+Epoch 15 (train)8.7s + (eval)0.9s: train loss = 0.04175 = (mf)0.04014 + (embed)0.00161, recall = 0.12334, ndcg = 0.16331, precision = 0.14599, map = 0.06553
+Epoch 16 (train)8.9s: train loss = 0.03916 = (mf)0.03748 + (embed)0.00168
+Epoch 17 (train)9.0s: train loss = 0.03575 = (mf)0.03400 + (embed)0.00175
+Epoch 18 (train)9.0s: train loss = 0.03453 = (mf)0.03272 + (embed)0.00182
+Epoch 19 (train)8.6s: train loss = 0.03400 = (mf)0.03212 + (embed)0.00188
+Epoch 20 (train)9.2s + (eval)1.0s: train loss = 0.03236 = (mf)0.03042 + (embed)0.00194, recall = 0.13128, ndcg = 0.17543, precision = 0.15550, map = 0.07098
+Epoch 21 (train)9.1s: train loss = 0.03115 = (mf)0.02916 + (embed)0.00199
+Epoch 22 (train)9.4s: train loss = 0.02957 = (mf)0.02751 + (embed)0.00205
+Epoch 23 (train)9.0s: train loss = 0.02818 = (mf)0.02608 + (embed)0.00211
+Epoch 24 (train)8.7s: train loss = 0.02638 = (mf)0.02422 + (embed)0.00216
+Epoch 25 (train)8.9s + (eval)0.9s: train loss = 0.02666 = (mf)0.02445 + (embed)0.00221, recall = 0.13709, ndcg = 0.18341, precision = 0.16240, map = 0.07455
+Epoch 26 (train)9.2s: train loss = 0.02509 = (mf)0.02282 + (embed)0.00227
+Epoch 27 (train)8.9s: train loss = 0.02325 = (mf)0.02093 + (embed)0.00232
+Epoch 28 (train)8.5s: train loss = 0.02202 = (mf)0.01965 + (embed)0.00237
+Epoch 29 (train)9.0s: train loss = 0.02138 = (mf)0.01896 + (embed)0.00243
+Epoch 30 (train)9.0s + (eval)0.9s: train loss = 0.02225 = (mf)0.01978 + (embed)0.00248, recall = 0.14030, ndcg = 0.18926, precision = 0.16612, map = 0.07737
+Epoch 31 (train)8.8s: train loss = 0.02231 = (mf)0.01980 + (embed)0.00251
+Epoch 32 (train)8.7s: train loss = 0.02038 = (mf)0.01781 + (embed)0.00256
+Epoch 33 (train)8.7s: train loss = 0.02028 = (mf)0.01766 + (embed)0.00261
+Epoch 34 (train)8.7s: train loss = 0.01879 = (mf)0.01614 + (embed)0.00266
+Epoch 35 (train)8.5s + (eval)0.9s: train loss = 0.01845 = (mf)0.01575 + (embed)0.00271, recall = 0.14525, ndcg = 0.19626, precision = 0.17180, map = 0.08061
+Epoch 36 (train)9.0s: train loss = 0.01845 = (mf)0.01569 + (embed)0.00275
+Epoch 37 (train)8.8s: train loss = 0.01814 = (mf)0.01535 + (embed)0.00279
+Epoch 38 (train)8.7s: train loss = 0.01757 = (mf)0.01474 + (embed)0.00283
+Epoch 39 (train)8.8s: train loss = 0.01699 = (mf)0.01412 + (embed)0.00287
+Epoch 40 (train)8.4s + (eval)0.9s: train loss = 0.01673 = (mf)0.01382 + (embed)0.00291, recall = 0.14834, ndcg = 0.20013, precision = 0.17515, map = 0.08211
+Epoch 41 (train)9.8s: train loss = 0.01574 = (mf)0.01279 + (embed)0.00295
+Epoch 42 (train)8.5s: train loss = 0.01637 = (mf)0.01339 + (embed)0.00298
+Epoch 43 (train)8.8s: train loss = 0.01714 = (mf)0.01412 + (embed)0.00302
+Epoch 44 (train)8.9s: train loss = 0.01568 = (mf)0.01262 + (embed)0.00305
+Epoch 45 (train)8.9s + (eval)1.1s: train loss = 0.01618 = (mf)0.01309 + (embed)0.00309, recall = 0.15104, ndcg = 0.20393, precision = 0.17870, map = 0.08413
+Epoch 46 (train)9.4s: train loss = 0.01409 = (mf)0.01097 + (embed)0.00313
+Epoch 47 (train)8.8s: train loss = 0.01500 = (mf)0.01183 + (embed)0.00316
+Epoch 48 (train)9.5s: train loss = 0.01427 = (mf)0.01107 + (embed)0.00319
+Epoch 49 (train)8.3s: train loss = 0.01427 = (mf)0.01104 + (embed)0.00323
+Epoch 50 (train)10.5s + (eval)1.2s: train loss = 0.01370 = (mf)0.01044 + (embed)0.00326, recall = 0.15244, ndcg = 0.20657, precision = 0.18019, map = 0.08504
+Took 455.2403181999998 seconds for training.
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="recommendations">
+<h3><span class="section-number">4.5.5. </span>Recommendations<a class="headerlink" href="#recommendations" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">recommend_k_items</span></code> produces k artist recommendations for each user passed to the function. <code class="docutils literal notranslate"><span class="pre">remove_seen=True</span></code> removes the artists already listened to by the user. We will produce recommendations using the trained model on instances from the test set as input.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">topk_scores</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">recommend_k_items</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="n">TOP_K</span><span class="p">,</span> <span class="n">remove_seen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">top_scores</span> <span class="o">=</span> <span class="n">topk_scores</span>
+<span class="n">top_scores</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">topk_scores</span><span class="o">.</span><span class="n">itemID</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">artist_dict</span><span class="p">)</span>
+<span class="n">top_scores</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>userID</th>
+      <th>itemID</th>
+      <th>prediction</th>
+      <th>name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>992</td>
+      <td>12.571548</td>
+      <td>Pet Shop Boys</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>151</td>
+      <td>11.216814</td>
+      <td>Michael Jackson</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>181</td>
+      <td>11.112077</td>
+      <td>a-ha</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>593</td>
+      <td>10.635868</td>
+      <td>David Bowie</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>1005</td>
+      <td>10.495359</td>
+      <td>Erasure</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">user_recommendations</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+    <span class="n">listened_to</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">train</span><span class="o">.</span><span class="n">userID</span> <span class="o">==</span> <span class="n">user</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;rating&#39;</span><span class="p">,</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">listened_to</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">listened_to</span><span class="o">.</span><span class="n">itemID</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">artist_dict</span><span class="p">)</span>
+    <span class="n">listened_to</span> <span class="o">=</span> <span class="n">listened_to</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;User &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; most listened to artists...&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">listened_to</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    
+    <span class="n">topk_scores_recs</span> <span class="o">=</span> <span class="n">topk_scores</span><span class="p">[</span><span class="n">topk_scores</span><span class="o">.</span><span class="n">userID</span> <span class="o">==</span> <span class="n">user</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;prediction&#39;</span><span class="p">,</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;User &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; recommendations...&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">topk_scores_recs</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
+    <span class="k">return</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">user_recommendations</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>User 500 most listened to artists...
+Christina Aguilera
+John Mayer
+Chico Buarque
+Sarah Brightman
+Oasis
+The Beatles
+Lady Gaga
+Adele
+Justin Timberlake
+Paul McCartney
+
+User 500 recommendations...
+Britney Spears
+BeyoncÃ©
+Kylie Minogue
+P!nk
+Coldplay
+Amy Winehouse
+Black Eyed Peas
+Mariah Carey
+Ke$ha
+Kelly Clarkson
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">user_recommendations</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>User 300 most listened to artists...
+Van Halen
+KISS
+Iron Maiden
+Black Sabbath
+Leaves&#39; Eyes
+Epica
+The Agonist
+Five Finger Death Punch
+AC/DC
+Deadstar Assembly
+
+User 300 recommendations...
+System of a Down
+Metallica
+Korn
+In Flames
+Megadeth
+Rammstein
+Bullet for My Valentine
+HIM
+Judas Priest
+Pantera
+</pre></div>
+</div>
+</div>
+</div>
+<p>At a glance, the recommendation system appears to work extremely well. User 500 has pretty broad and genric music tastes, yet each recommended artist makes sense. User 300 appears to have more specified music interests. Most of user 300’s top listened to artists are rock/heavy metal bands from the 70s/80s. The recommendations are also mainly rock/heavy metal bands from the same time period. Across both users, all recommendations appear relevant and potentially useful.</p>
+</div>
+<div class="section" id="evaluation">
+<h3><span class="section-number">4.5.6. </span>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this headline">¶</a></h3>
+<p>With <code class="docutils literal notranslate"><span class="pre">topk_scores</span></code> (k=10) predicted by the model, we can evaluate how LightGCN performs on the test set. We will use four evaluation metrics:</p>
+<ol class="simple">
+<li><p>Mean Average Precision (MAP)</p></li>
+<li><p>Normalized Discounted Cumulative Gain (NDCGG)</p></li>
+<li><p>Precision at 10</p></li>
+<li><p>Recall at 10</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eval_map</span> <span class="o">=</span> <span class="n">map_at_k</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">topk_scores</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">TOP_K</span><span class="p">)</span>
+<span class="n">eval_ndcg</span> <span class="o">=</span> <span class="n">ndcg_at_k</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">topk_scores</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">TOP_K</span><span class="p">)</span>
+<span class="n">eval_precision</span> <span class="o">=</span> <span class="n">precision_at_k</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">topk_scores</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">TOP_K</span><span class="p">)</span>
+<span class="n">eval_recall</span> <span class="o">=</span> <span class="n">recall_at_k</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">topk_scores</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">TOP_K</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MAP:</span><span class="se">\t</span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">eval_map</span><span class="p">,</span>
+      <span class="s2">&quot;NDCG:</span><span class="se">\t</span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">eval_ndcg</span><span class="p">,</span>
+      <span class="s2">&quot;Precision@K:</span><span class="se">\t</span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">eval_precision</span><span class="p">,</span>
+      <span class="s2">&quot;Recall@K:</span><span class="se">\t</span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">eval_recall</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAP:	0.023575
+NDCG:	0.082716
+Precision@K:	0.087785
+Recall@K:	0.074625
+</pre></div>
+</div>
+</div>
+</div>
+<p>These results are promising and they back up the assumption made from looking at two users’ recommendations that the model works. Although, the test split was different than the test splits used to evaluate matrix factorization and softmax, this model’s precision is still almost 10 times higher. It appears that this is the superior recommendation system and that we have managed to beat the standard of the initial matrix factorization model.</p>
+</div>
+</div>
+<div class="section" id="conclusion">
+<h2><span class="section-number">4.6. </span>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>LightGCN is a light weight and efficient form of a GCN that can be quickly built, trained, and evaluated on this dataset without the need for a GPU. Even without tuning the hyperparameters, the results and recommendations produced by this model are impressive. Here, we have produced a relevant and potentially useful artist recommendation system. The <a class="reference external" href="https://github.com/microsoft/recommenders">recommender library</a> was also extremely useful and appropiate for our objective of building an artist recommender system using our <a class="reference external" href="http://Last.fm">Last.fm</a> dataset.</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="softmax.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">3. </span>Softmax model</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="content_based.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">5. </span>Content-Based Recommender</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Niamh Murphy<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

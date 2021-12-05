@@ -1,0 +1,776 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>5. Content-Based Recommender &#8212; Artist Recommender System</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="6. Conclusion" href="Conclusion.html" />
+    <link rel="prev" title="4. LightGCN" href="lightgcn_mod.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Artist Recommender System</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="introd.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Methodology
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="data_description.html">
+   1. Data Exploration &amp; Pre-Processing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="matrix_fact.html">
+   2. Matrix Factorization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="softmax.html">
+   3. Softmax model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lightgcn_mod.html">
+   4. LightGCN
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   5. Content-Based Recommender
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Conclusion.html">
+   6. Conclusion
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bib.html">
+   7. Bibliography
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/content_based.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fcontent_based.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/content_based.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#outline">
+   5.1. Outline
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#import-required-packages">
+   5.2. Import required packages
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#read-in-data">
+   5.3. Read in data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tf-idf-for-tags">
+   5.4. TF-IDF for tags
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#similarity-matrix">
+   5.5. Similarity Matrix
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#recommender-function">
+   5.6. Recommender Function
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#sanity-check-similarity-scores">
+   5.7. Sanity check similarity scores
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   5.8. Conclusion
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="content-based-recommender">
+<h1><span class="section-number">5. </span>Content-Based Recommender<a class="headerlink" href="#content-based-recommender" title="Permalink to this headline">¶</a></h1>
+<p>This section involves building a simple content-based recommender system for artists. Content-based filtering involves making reecommendations based on item features. For this dataset, we have limited item features, only taggings made by the users. <a class="reference external" href="http://Last.fm">Last.fm</a> allows users to tag artists with keywords and our dataset contains this user-artist tagging information. These keywords can be anything, but are usually relective of genre or sentiment.</p>
+<p>The recommender built below takes an artist as input and outputs a list of similar artists based only on the tags received by each artists. There are too many tags to one-hot-encode all of them. Instead I decided on a TF-IDF approach to convert the set of tags for each artists into numerical values. After performing TF-IDF vectorization I was able to compute a cosine similarity matrix. The recommender system works by simply recommending the artists with the highest similarity scores to the inputted artist.</p>
+<div class="section" id="outline">
+<h2><span class="section-number">5.1. </span>Outline<a class="headerlink" href="#outline" title="Permalink to this headline">¶</a></h2>
+<ol class="simple">
+<li><p>TF-IDF of Tag List</p></li>
+<li><p>Calculate Similarity Matrix</p></li>
+<li><p>Recommender</p></li>
+<li><p>Sanity Check</p></li>
+</ol>
+</div>
+<div class="section" id="import-required-packages">
+<h2><span class="section-number">5.2. </span>Import required packages<a class="headerlink" href="#import-required-packages" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">ast</span> <span class="kn">import</span> <span class="n">literal_eval</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics.pairwise</span> <span class="kn">import</span> <span class="n">cosine_similarity</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfVectorizer</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics.pairwise</span> <span class="kn">import</span> <span class="n">linear_kernel</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="read-in-data">
+<h2><span class="section-number">5.3. </span>Read in data<a class="headerlink" href="#read-in-data" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">artist_features</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;..</span><span class="se">\\</span><span class="s1">data</span><span class="se">\\</span><span class="s1">processed</span><span class="se">\\</span><span class="s1">artist_features.csv&#39;</span><span class="p">,</span><span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Filter out artists with no tags</strong><br />
+This method finds similarity based on tags. Therefore, artists that have not been tagged at all can not compared using tags. We will fiter out all artists that have no tags.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">artist_features</span> <span class="o">=</span> <span class="n">artist_features</span><span class="p">[</span><span class="n">artist_features</span><span class="p">[</span><span class="s1">&#39;peak_year&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Convert all_tags feature to string</strong><br />
+all_tags is currently stored as a list of strings. Let’s convert this into a space seperated string.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">artist_features</span><span class="o">.</span><span class="n">all_tags</span> <span class="o">=</span> <span class="n">artist_features</span><span class="o">.</span><span class="n">all_tags</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">artist_features</span><span class="o">.</span><span class="n">all_tags</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0    weeabo jrock visualkei betterthanladygaga goth...
+1    german seenlive darkwave industrial gothic amb...
+2    blackmetal norwegianblackmetal truenorwegianbl...
+Name: all_tags, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="tf-idf-for-tags">
+<h2><span class="section-number">5.4. </span>TF-IDF for tags<a class="headerlink" href="#tf-idf-for-tags" title="Permalink to this headline">¶</a></h2>
+<p>Term Frequency-Inverse Document Frequency (TF-IDF) is a technique that can be used to quantify textual data. Term frequency measures the frequency of a word in a document. Inverse document frequency is a measure of how common or rare a word is across the entire dataset. When combined TF-IDF increases proportionally to the occurances of a word in a document, but is offset by the number of documnets that contain that word. TF-IDF can be used to compute a score that is indicative of the importance of each word within the document and the corpus.</p>
+<p>We will apply TF-IDF vectorization to all_tags. This will transform the all_tags column to numerical data. Then we will be able to compare the values for different artists and calculate their similarity based on some form of a similarity score.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tfidf</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">()</span>
+
+<span class="c1">#Construct the required TF-IDF matrix by applying the fit_transform method on the all_tags feature</span>
+<span class="n">all_tags_matrix</span> <span class="o">=</span> <span class="n">tfidf</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">artist_features</span><span class="p">[</span><span class="s1">&#39;all_tags&#39;</span><span class="p">])</span>
+
+<span class="c1">#Output the shape of tfidf_matrix</span>
+<span class="n">all_tags_matrix</span><span class="o">.</span><span class="n">shape</span>
+
+<span class="c1"># Map Matrix Index to Artist Name</span>
+<span class="n">mapping</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">artist_features</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">index</span> <span class="o">=</span> <span class="n">artist_features</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_tags_matrix</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;12133x9396 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
+	with 106845 stored elements in Compressed Sparse Row format&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="similarity-matrix">
+<h2><span class="section-number">5.5. </span>Similarity Matrix<a class="headerlink" href="#similarity-matrix" title="Permalink to this headline">¶</a></h2>
+<p>We now have a TF-IDF feature matrix for all of the artists. Every artist has 9,396 featuress (tag words). In order to find the similarity between the artists, we will use cosine_similarity. The linear_kernel function will compute the cosine_similarity for us.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">similarity_matrix</span> <span class="o">=</span> <span class="n">linear_kernel</span><span class="p">(</span><span class="n">all_tags_matrix</span><span class="p">,</span><span class="n">all_tags_matrix</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">similarity_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">similarity_matrix</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">artist_features</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">index</span> <span class="o">=</span> <span class="n">artist_features</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+<span class="n">similarity_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>name</th>
+      <th>MALICE MIZER</th>
+      <th>Diary of Dreams</th>
+      <th>Carpathian Forest</th>
+      <th>Moi dix Mois</th>
+      <th>Bella Morte</th>
+      <th>Moonspell</th>
+      <th>Marilyn Manson</th>
+      <th>DIR EN GREY</th>
+      <th>Combichrist</th>
+      <th>Grendel</th>
+      <th>...</th>
+      <th>Electrosoul System</th>
+      <th>Nostalgia 77</th>
+      <th>The Young Gods</th>
+      <th>Wiseblood</th>
+      <th>LOSTFREEQ</th>
+      <th>Ciccone Youth</th>
+      <th>Apollo 440</th>
+      <th>Die Krupps</th>
+      <th>Diamanda GalÃ¡s</th>
+      <th>Oz Alchemist</th>
+    </tr>
+    <tr>
+      <th>name</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>MALICE MIZER</th>
+      <td>1.00000</td>
+      <td>0.09213</td>
+      <td>0.0</td>
+      <td>0.436071</td>
+      <td>0.125768</td>
+      <td>0.068878</td>
+      <td>0.029499</td>
+      <td>0.555061</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>Diary of Dreams</th>
+      <td>0.09213</td>
+      <td>1.00000</td>
+      <td>0.0</td>
+      <td>0.081005</td>
+      <td>0.395459</td>
+      <td>0.250002</td>
+      <td>0.127415</td>
+      <td>0.095416</td>
+      <td>0.068551</td>
+      <td>0.096065</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.050611</td>
+      <td>0.0</td>
+      <td>0.044474</td>
+      <td>0.166139</td>
+      <td>0.0</td>
+      <td>0.034243</td>
+    </tr>
+    <tr>
+      <th>Carpathian Forest</th>
+      <td>0.00000</td>
+      <td>0.00000</td>
+      <td>1.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.067779</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>3 rows × 12133 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">similarity_df</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/content_based_19_0.png" src="_images/content_based_19_0.png" />
+</div>
+</div>
+<p>The heatmap is mostly dark meaning that most artist pairs have a low similarity between the TF-IDF scores for their tags. However, there are some bright pixels which illustrates that some artists do have very similar tags. The line of bright pixels going from the top left corner to the bottom right corner captures the similarity between artists and themselves, which is always 1. As this is a large matrix (9396 x 9396), it is not possible to visualise the matrix in a manner where can clearly identify which artists have similar tags.</p>
+</div>
+<div class="section" id="recommender-function">
+<h2><span class="section-number">5.6. </span>Recommender Function<a class="headerlink" href="#recommender-function" title="Permalink to this headline">¶</a></h2>
+<p>Now, we will make a recommender function that recommends artists using cosine_similarity. The function will take an aritst name as input and identify the top 10 similar artists using the cosine similarity matrix.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">recommend_artists_based_on_tags</span><span class="p">(</span><span class="n">artist_input</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="n">artist_index</span> <span class="o">=</span> <span class="n">mapping</span><span class="p">[</span><span class="n">artist_input</span><span class="p">]</span>
+    <span class="c1">#get similarity values with other artists</span>
+    <span class="c1">#similarity_score is the list of index and similarity matrix</span>
+    <span class="n">similarity_score</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">similarity_matrix</span><span class="p">[</span><span class="n">artist_index</span><span class="p">]))</span>
+    <span class="c1">#sort in descending order the similarity score of artist inputted with all the other artists</span>
+    <span class="n">similarity_score</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">similarity_score</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Get the scores of the k most similar movies. Ignore the first movie.</span>
+    <span class="n">similarity_score</span> <span class="o">=</span> <span class="n">similarity_score</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">k</span><span class="p">]</span>
+    <span class="c1">#return movie names using the mapping series</span>
+    <span class="n">artist_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">similarity_score</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">artist_features</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">artist_indices</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">recommend_artists_based_on_tags</span><span class="p">(</span><span class="s1">&#39;The Beatles&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1762            Rita Lee
+9881         Karyn White
+9668     Freddie Jackson
+10727        Keith Sweat
+2526     Vanessa Carlton
+4871      Glenn Medeiros
+334                 Cher
+9885       Patti LaBelle
+5619              Devdas
+Name: name, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<p>The above 10 recommendations for users who like The Beatles do not appear to be particularly relevant. The recommendations are based on artists who have received similar taggings to The Beatles. This approach purely uses tag features about the artists. It does not take into account how popular or unpopular the artists are. For this reason, the recommendations are poor and would likely be of little interest to users. Although this method alone would not make a good recommender system, it could still prove useful if combined with a collaborative filtering approach.</p>
+</div>
+<div class="section" id="sanity-check-similarity-scores">
+<h2><span class="section-number">5.7. </span>Sanity check similarity scores<a class="headerlink" href="#sanity-check-similarity-scores" title="Permalink to this headline">¶</a></h2>
+<p>It is hard to quantify the potential usefulness of this method for a hybrid approach. To determine if this approach could add value, we will look at the similariy scores for  well known artist pairs. Before we do that though, we will calculate the mean similarity score of the entire similarity matrix. It is important to know this so we can judge whether a particular pair has a relatively high or low similarity score.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sim_mean</span> <span class="o">=</span> <span class="n">similarity_df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mean similarity score: &#39;</span><span class="p">,</span> <span class="n">sim_mean</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mean similarity score:  0.01383527847128692
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>U2 &amp; Coldplay</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">similarity_df</span><span class="p">[</span><span class="n">similarity_df</span><span class="o">.</span><span class="n">index</span> <span class="o">==</span> <span class="s1">&#39;U2&#39;</span><span class="p">][</span><span class="s1">&#39;Coldplay&#39;</span><span class="p">][</span><span class="s1">&#39;U2&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.22446369776706124
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>U2 &amp; Lady Gaga</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">similarity_df</span><span class="p">[</span><span class="n">similarity_df</span><span class="o">.</span><span class="n">index</span> <span class="o">==</span> <span class="s1">&#39;U2&#39;</span><span class="p">][</span><span class="s1">&#39;Lady Gaga&#39;</span><span class="p">][</span><span class="s1">&#39;U2&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.08808980506392858
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Lady Gaga &amp; Katy Perry</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">similarity_df</span><span class="p">[</span><span class="n">similarity_df</span><span class="o">.</span><span class="n">index</span> <span class="o">==</span> <span class="s1">&#39;Katy Perry&#39;</span><span class="p">][</span><span class="s1">&#39;Lady Gaga&#39;</span><span class="p">][</span><span class="s1">&#39;Katy Perry&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.24031142443152187
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Katy Perry &amp; Luciano Pavarotti</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">similarity_df</span><span class="p">[</span><span class="n">similarity_df</span><span class="o">.</span><span class="n">index</span> <span class="o">==</span> <span class="s1">&#39;Luciano Pavarotti&#39;</span><span class="p">][</span><span class="s1">&#39;Katy Perry&#39;</span><span class="p">][</span><span class="s1">&#39;Luciano Pavarotti&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.0
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Luciano Pavarotti &amp; Andrea Bocelli</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">similarity_df</span><span class="p">[</span><span class="n">similarity_df</span><span class="o">.</span><span class="n">index</span> <span class="o">==</span> <span class="s1">&#39;Andrea Bocelli&#39;</span><span class="p">][</span><span class="s1">&#39;Luciano Pavarotti&#39;</span><span class="p">][</span><span class="s1">&#39;Andrea Bocelli&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.22851920014637395
+</pre></div>
+</div>
+</div>
+</div>
+<p>Above are the similarity scores for pairs of artists that I would either associate as similar or dissimilar artists. The results are promising, each artist pair that I would identify as similar have a cosine similarity score of above 0.22. Meanwhile, the artist pairs I would label as disimilar have scores below 0.89. U2 and Coldplay are both European rock bands from the same era, it is reasonable to think that they received similar taggings. U2 and Lady Gaga are less similar, however there were both popular around the same time. Lady Gaga and Katy Perry have the highest similarity score of the above examples, which is unsurprising as they are both popular female pop artists from the same time period. Katy Perry and Luciano Pavarotti, the most extreme artist pair I could think of, have a similarty score of 0. Meanwhile, Luciano Pavarotti and Andrea Bocelli,two Italian opera tenors, had a relatively high similarity score of 0.23. While the above examples are not representative of the entire dataset they are indicative that this content-based recommender can identify similar artists based solely on tags.</p>
+</div>
+<div class="section" id="conclusion">
+<h2><span class="section-number">5.8. </span>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>It is clear that this system on its own would make a poor recommender system. However, the tags received by an artist are informative and can be used to identify similar artists. Through TF-IDF we captured information from each unique tag received by the artist. By keeping all tags and representing them in a vector space we were able assess similarity of artists. A content-based similarity matrix such as this one could be used to improve the results of a collaborative filtering recommender system. Uunfortunately, due to time constraits, I am unable to integrate this method with the previous collaborative approach to form a hybrid.</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="lightgcn_mod.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">4. </span>LightGCN</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="Conclusion.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">6. </span>Conclusion</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Niamh Murphy<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,831 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3. Softmax model &#8212; Artist Recommender System</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4. LightGCN" href="lightgcn_mod.html" />
+    <link rel="prev" title="2. Matrix Factorization" href="matrix_fact.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Artist Recommender System</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="introd.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Methodology
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="data_description.html">
+   1. Data Exploration &amp; Pre-Processing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="matrix_fact.html">
+   2. Matrix Factorization
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   3. Softmax model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="lightgcn_mod.html">
+   4. LightGCN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="content_based.html">
+   5. Content-Based Recommender
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Conclusion.html">
+   6. Conclusion
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bib.html">
+   7. Bibliography
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/softmax.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fsoftmax.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/softmax.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#outline">
+   3.1. Outline
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#create-dataframe">
+   3.2. Create DataFrame
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#batch-generation">
+   3.3. Batch generation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#loss-function">
+   3.4. Loss function
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#build-a-softmax-model-train-it-and-inspect-its-embeddings">
+   3.5. Build a softmax model, train it, and inspect its embeddings.
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#build">
+     3.5.1. Build
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#train">
+     3.5.2. Train
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#inspect-embeddings">
+     3.5.3. Inspect Embeddings
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   3.6. Conclusion
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="softmax-model">
+<h1><span class="section-number">3. </span>Softmax model<a class="headerlink" href="#softmax-model" title="Permalink to this headline">¶</a></h1>
+<p>In this section, we will train a simple softmax model that predicts whether a given user has listened to an artist.
+The model will take as input a feature vector <span class="math notranslate nohighlight">\(x\)</span> representing the list of artists the user has listened to. Softmax, sometimes referred to as multinomial logistic regression, is a form of logistic regression. Softmax treats the problem as a multiclass prediction problem and will calculate the probability a user has listened to a certain song.</p>
+<div class="section" id="outline">
+<h2><span class="section-number">3.1. </span>Outline<a class="headerlink" href="#outline" title="Permalink to this headline">¶</a></h2>
+<ol class="simple">
+<li><p>Batch Generation</p></li>
+<li><p>Loss Function</p></li>
+<li><p>Build, Train, Inspect</p></li>
+</ol>
+</div>
+<div class="section" id="create-dataframe">
+<h2><span class="section-number">3.2. </span>Create DataFrame<a class="headerlink" href="#create-dataframe" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">listened_artists</span> <span class="o">=</span> <span class="p">(</span><span class="n">listens</span><span class="p">[[</span><span class="s2">&quot;userID&quot;</span><span class="p">,</span> <span class="s2">&quot;artistID&quot;</span><span class="p">]]</span>
+                <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;userID&quot;</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">str</span><span class="p">))))</span>
+<span class="n">listened_artists</span><span class="o">.</span><span class="n">userID</span> <span class="o">=</span> <span class="n">listened_artists</span><span class="o">.</span><span class="n">userID</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">)</span>
+<span class="n">listened_artists</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>userID</th>
+      <th>artistID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>[45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 5...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>[95, 96, 97, 98, 99, 100, 101, 102, 103, 104, ...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>10</td>
+      <td>[66, 183, 185, 224, 282, 294, 327, 338, 371, 3...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>100</td>
+      <td>[597, 610, 735, 739, 744, 746, 747, 763, 769, ...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1000</td>
+      <td>[49, 50, 58, 59, 61, 65, 83, 251, 282, 283, 28...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="batch-generation">
+<h2><span class="section-number">3.3. </span>Batch generation<a class="headerlink" href="#batch-generation" title="Permalink to this headline">¶</a></h2>
+<p>We then create a function that generates an example batch, such that each example contains the following features:</p>
+<ul class="simple">
+<li><p>artistID: A tensor of strings of the artist ids that the user listened to.</p></li>
+<li><p>tag: A tensor of strings of the tags of those artists</p></li>
+<li><p>year: A tensor of strings of the peak year.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">years_dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">artist</span><span class="p">:</span> <span class="n">year</span> <span class="k">for</span> <span class="n">artist</span><span class="p">,</span> <span class="n">year</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">artists_df</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">artists_df</span><span class="p">[</span><span class="s2">&quot;peak_year&quot;</span><span class="p">])</span>
+<span class="p">}</span>
+<span class="n">tags_dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">artist</span><span class="p">:</span> <span class="n">tags</span>
+    <span class="k">for</span> <span class="n">artist</span><span class="p">,</span> <span class="n">tags</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">artists_df</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">artists_df</span><span class="p">[</span><span class="s2">&quot;all_tags&quot;</span><span class="p">])</span>
+<span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">make_batch</span><span class="p">(</span><span class="n">listens</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;Creates a batch of examples.</span>
+<span class="sd">  Args:</span>
+<span class="sd">    listens: A DataFrame of ratings such that examples[&quot;artistID&quot;] is a list of</span>
+<span class="sd">      artists listened to by a user.</span>
+<span class="sd">    batch_size: The batch size.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">def</span> <span class="nf">pad</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fill</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">fill</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+
+  <span class="n">artist</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="n">year</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="n">tag</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="n">label</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">artistIDs</span> <span class="ow">in</span> <span class="n">listens</span><span class="p">[</span><span class="s2">&quot;artistID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+    <span class="n">artist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">artistIDs</span><span class="p">)</span>
+    <span class="n">tag</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">artistID</span> <span class="ow">in</span> <span class="n">artistIDs</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">tags_dict</span><span class="p">[</span><span class="n">artistID</span><span class="p">]])</span>
+    <span class="n">year</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">years_dict</span><span class="p">[</span><span class="n">artistID</span><span class="p">]</span> <span class="k">for</span> <span class="n">artistID</span> <span class="ow">in</span> <span class="n">artistIDs</span><span class="p">])</span>
+    <span class="n">label</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">artistID</span><span class="p">)</span> <span class="k">for</span> <span class="n">artistID</span> <span class="ow">in</span> <span class="n">artistIDs</span><span class="p">])</span>
+  <span class="n">features</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">pad</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+      <span class="s2">&quot;peak_year&quot;</span><span class="p">:</span> <span class="n">pad</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+      <span class="s2">&quot;tag_1&quot;</span><span class="p">:</span> <span class="n">pad</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+      <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">pad</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;making batch&#39;</span><span class="p">)</span>
+  <span class="k">global</span> <span class="n">tmp</span>
+  <span class="n">tmp</span> <span class="o">=</span> <span class="n">features</span>
+  <span class="n">batch</span> <span class="o">=</span> <span class="p">(</span>
+      <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_tensor_slices</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">repeat</span><span class="p">()</span>
+      <span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">make_one_shot_iterator</span><span class="p">()</span>
+      <span class="o">.</span><span class="n">get_next</span><span class="p">())</span>
+
+  <span class="k">return</span> <span class="n">batch</span>
+
+<span class="k">def</span> <span class="nf">select_random</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;Selectes a random elements from each row of x.&quot;&quot;&quot;</span>
+  <span class="k">def</span> <span class="nf">to_float</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+  <span class="k">def</span> <span class="nf">to_int</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+  <span class="n">batch_size</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">rn</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+  <span class="n">nnz</span> <span class="o">=</span> <span class="n">to_float</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+  <span class="n">rnd</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">random_uniform</span><span class="p">([</span><span class="n">batch_size</span><span class="p">])</span>
+  <span class="n">ids</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">to_int</span><span class="p">(</span><span class="n">rn</span><span class="p">),</span> <span class="n">to_int</span><span class="p">(</span><span class="n">nnz</span> <span class="o">*</span> <span class="n">rnd</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">to_int</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">gather_nd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ids</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="loss-function">
+<h2><span class="section-number">3.4. </span>Loss function<a class="headerlink" href="#loss-function" title="Permalink to this headline">¶</a></h2>
+<p>Tthe softmax model maps the input features <span class="math notranslate nohighlight">\(x\)</span> to a user embedding <span class="math notranslate nohighlight">\(\psi(x) \in \mathbb R^d\)</span>, where <span class="math notranslate nohighlight">\(d\)</span> is the embedding dimension. This vector is then multiplied by an artist embedding matrix <span class="math notranslate nohighlight">\(V \in \mathbb R^{m \times d}\)</span> (where <span class="math notranslate nohighlight">\(m\)</span> is the number of artists), and the final output of the model is the softmax of the product
+$<span class="math notranslate nohighlight">\(
+\hat p(x) = \text{softmax}(\psi(x) V^\top).
+\)</span><span class="math notranslate nohighlight">\(
+Given a target label \)</span>y<span class="math notranslate nohighlight">\(, if we denote by \)</span>p = 1_y<span class="math notranslate nohighlight">\( a one-hot encoding of this target label, then the loss is the cross-entropy between \)</span>\hat p(x)<span class="math notranslate nohighlight">\( and \)</span>p$.</p>
+<p>We will write a function that takes tensors representing the user embeddings  ψ(x) , movie embeddings  V , target label  y , and return the cross-entropy loss.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">softmax_loss</span><span class="p">(</span><span class="n">user_embeddings</span><span class="p">,</span> <span class="n">artist_embeddings</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;Returns the cross-entropy loss of the softmax model.</span>
+<span class="sd">  Args:</span>
+<span class="sd">    user_embeddings: A tensor of shape [batch_size, embedding_dim].</span>
+<span class="sd">    artist_embeddings: A tensor of shape [num_artists, embedding_dim].</span>
+<span class="sd">    labels: A tensor of [batch_size], such that labels[i] is the target label</span>
+<span class="sd">      for example i.</span>
+<span class="sd">  Returns:</span>
+<span class="sd">    The mean cross-entropy loss.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="c1"># Verify that the embddings have compatible dimensions</span>
+  <span class="n">user_emb_dim</span> <span class="o">=</span> <span class="n">user_embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+  <span class="n">artist_emb_dim</span> <span class="o">=</span> <span class="n">artist_embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+  <span class="k">if</span> <span class="n">user_emb_dim</span> <span class="o">!=</span> <span class="n">artist_emb_dim</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="s2">&quot;The user embedding dimension </span><span class="si">%d</span><span class="s2"> should match the artist embedding &quot;</span>
+        <span class="s2">&quot;dimension </span><span class="si">% d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">user_emb_dim</span><span class="p">,</span> <span class="n">artist_emb_dim</span><span class="p">))</span>
+
+  <span class="n">logits</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">user_embeddings</span><span class="p">,</span> <span class="n">artist_embeddings</span><span class="p">,</span> <span class="n">transpose_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="n">loss</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sparse_softmax_cross_entropy_with_logits</span><span class="p">(</span>
+      <span class="n">logits</span><span class="o">=</span><span class="n">logits</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">))</span>
+  <span class="k">return</span> <span class="n">loss</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="build-a-softmax-model-train-it-and-inspect-its-embeddings">
+<h2><span class="section-number">3.5. </span>Build a softmax model, train it, and inspect its embeddings.<a class="headerlink" href="#build-a-softmax-model-train-it-and-inspect-its-embeddings" title="Permalink to this headline">¶</a></h2>
+<p>We are now ready to build a softmax CFModel. The architecture of the model is defined in the function <code class="docutils literal notranslate"><span class="pre">create_user_embeddings</span></code> and illustrated in the figure below. The input embeddings (artistID, tag_1 and peak_year) are concatenated to form the input layer, then we have hidden layers with dimensions specified by the <code class="docutils literal notranslate"><span class="pre">hidden_dims</span></code> argument. Finally, the last hidden layer is multiplied by the artist embeddings to obtain the logits layer. For the target label, we will use a randomly-sampled artistID from the list of artists the user has listened to.</p>
+<p><img alt="Softmax model" src=".%5Csoftmax_schematic.png" /></p>
+<div class="section" id="build">
+<h3><span class="section-number">3.5.1. </span>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">build_softmax_model</span><span class="p">(</span><span class="n">listened_artists</span><span class="p">,</span> <span class="n">embedding_cols</span><span class="p">,</span> <span class="n">hidden_dims</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;Builds a Softmax model for lastfm.</span>
+<span class="sd">  Args:</span>
+<span class="sd">    listened_artists: DataFrame of traing examples.</span>
+<span class="sd">    embedding_cols: A dictionary mapping feature names (string) to embedding</span>
+<span class="sd">      column objects. This will be used in tf.feature_column.input_layer() to</span>
+<span class="sd">      create the input layer.</span>
+<span class="sd">    hidden_dims: int list of the dimensions of the hidden layers.</span>
+<span class="sd">  Returns:</span>
+<span class="sd">    A CFModel object.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">def</span> <span class="nf">create_network</span><span class="p">(</span><span class="n">features</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Maps input features dictionary to user embeddings.</span>
+<span class="sd">    Args:</span>
+<span class="sd">      features: A dictionary of input string tensors.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">      outputs: A tensor of shape [batch_size, embedding_dim].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Create a bag-of-words embedding for each sparse feature.</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">feature_column</span><span class="o">.</span><span class="n">input_layer</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">embedding_cols</span><span class="p">)</span>
+    <span class="c1"># Hidden layers.</span>
+    <span class="n">input_dim</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">output_dim</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hidden_dims</span><span class="p">):</span>
+      <span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span>
+          <span class="s2">&quot;hidden</span><span class="si">%d</span><span class="s2">_w_&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">input_dim</span><span class="p">,</span> <span class="n">output_dim</span><span class="p">],</span>
+          <span class="n">initializer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">truncated_normal_initializer</span><span class="p">(</span>
+              <span class="n">stddev</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">output_dim</span><span class="p">)))</span> <span class="o">/</span> <span class="mf">10.</span>
+      <span class="n">outputs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+      <span class="n">input_dim</span> <span class="o">=</span> <span class="n">output_dim</span>
+      <span class="n">inputs</span> <span class="o">=</span> <span class="n">outputs</span>
+    <span class="k">return</span> <span class="n">outputs</span>
+
+  <span class="n">train_listened_artists</span><span class="p">,</span> <span class="n">test_listened_artists</span> <span class="o">=</span> <span class="n">split_dataframe</span><span class="p">(</span><span class="n">listened_artists</span><span class="p">)</span>
+  <span class="n">train_batch</span> <span class="o">=</span> <span class="n">make_batch</span><span class="p">(</span><span class="n">train_listened_artists</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+  <span class="n">test_batch</span> <span class="o">=</span> <span class="n">make_batch</span><span class="p">(</span><span class="n">test_listened_artists</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+  <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">variable_scope</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># Train</span>
+    <span class="n">train_user_embeddings</span> <span class="o">=</span> <span class="n">create_network</span><span class="p">(</span><span class="n">train_batch</span><span class="p">)</span>
+    <span class="n">train_labels</span> <span class="o">=</span> <span class="n">select_random</span><span class="p">(</span><span class="n">train_batch</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">])</span>
+  <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">variable_scope</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="c1"># Test</span>
+    <span class="n">test_user_embeddings</span> <span class="o">=</span> <span class="n">create_network</span><span class="p">(</span><span class="n">test_batch</span><span class="p">)</span>
+    <span class="n">test_labels</span> <span class="o">=</span> <span class="n">select_random</span><span class="p">(</span><span class="n">test_batch</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">])</span>
+    <span class="n">artist_embeddings</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span>
+        <span class="s2">&quot;input_layer/id_embedding/embedding_weights&quot;</span><span class="p">)</span>
+
+  <span class="n">test_loss</span> <span class="o">=</span> <span class="n">softmax_loss</span><span class="p">(</span>
+      <span class="n">test_user_embeddings</span><span class="p">,</span> <span class="n">artist_embeddings</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span>
+  <span class="n">train_loss</span> <span class="o">=</span> <span class="n">softmax_loss</span><span class="p">(</span>
+      <span class="n">train_user_embeddings</span><span class="p">,</span> <span class="n">artist_embeddings</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">)</span>
+  <span class="n">_</span><span class="p">,</span> <span class="n">test_precision_at_10</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">precision_at_k</span><span class="p">(</span>
+      <span class="n">labels</span><span class="o">=</span><span class="n">test_labels</span><span class="p">,</span>
+      <span class="n">predictions</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">test_user_embeddings</span><span class="p">,</span> <span class="n">artist_embeddings</span><span class="p">,</span> <span class="n">transpose_b</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+      <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+  <span class="n">metrics</span> <span class="o">=</span> <span class="p">(</span>
+      <span class="p">{</span><span class="s2">&quot;train_loss&quot;</span><span class="p">:</span> <span class="n">train_loss</span><span class="p">,</span> <span class="s2">&quot;test_loss&quot;</span><span class="p">:</span> <span class="n">test_loss</span><span class="p">},</span>
+      <span class="p">{</span><span class="s2">&quot;test_precision_at_10&quot;</span><span class="p">:</span> <span class="n">test_precision_at_10</span><span class="p">}</span>
+  <span class="p">)</span>
+  <span class="n">embeddings</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;artistID&quot;</span><span class="p">:</span> <span class="n">artist_embeddings</span><span class="p">}</span>
+  <span class="k">return</span> <span class="n">CFModel</span><span class="p">(</span><span class="n">embeddings</span><span class="p">,</span> <span class="n">train_loss</span><span class="p">,</span> <span class="n">metrics</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="train">
+<h3><span class="section-number">3.5.2. </span>Train<a class="headerlink" href="#train" title="Permalink to this headline">¶</a></h3>
+<p>We are now ready to train the softmax model. The following hyperparameters can be set:</p>
+<ul class="simple">
+<li><p>learning rate</p></li>
+<li><p>number of iterations. Note: you can run <code class="docutils literal notranslate"><span class="pre">softmax_model.train()</span></code> again to continue training the model from its current state.</p></li>
+<li><p>input embedding dimensions (the <code class="docutils literal notranslate"><span class="pre">input_dims</span></code> argument)</p></li>
+<li><p>number of hidden layers and size of each layer (the <code class="docutils literal notranslate"><span class="pre">hidden_dims</span></code> argument)</p></li>
+</ul>
+<p>Note: since our input features are string-valued (artistID, tag_1, and peak_year), we need to map them to integer ids. This is done using <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/feature_column/categorical_column_with_vocabulary_list"><code class="docutils literal notranslate"><span class="pre">tf.feature_column.categorical_column_with_vocabulary_list</span></code></a>, which takes a vocabulary list specifying all the values the feature can take. Then each id is mapped to an embedding vector using <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/feature_column/embedding_column"><code class="docutils literal notranslate"><span class="pre">tf.feature_column.embedding_column</span></code></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create feature embedding columns</span>
+<span class="k">def</span> <span class="nf">make_embedding_col</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">):</span>
+  <span class="n">categorical_col</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">feature_column</span><span class="o">.</span><span class="n">categorical_column_with_vocabulary_list</span><span class="p">(</span>
+      <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">vocabulary_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">artists_df</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)),</span> <span class="n">num_oov_buckets</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">feature_column</span><span class="o">.</span><span class="n">embedding_column</span><span class="p">(</span>
+      <span class="n">categorical_column</span><span class="o">=</span><span class="n">categorical_col</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">embedding_dim</span><span class="p">,</span>
+      <span class="c1"># default initializer: trancated normal with stddev=1/sqrt(dimension)</span>
+      <span class="n">combiner</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span><span class="o">.</span><span class="n">as_default</span><span class="p">():</span>
+  <span class="n">softmax_model</span> <span class="o">=</span> <span class="n">build_softmax_model</span><span class="p">(</span>
+      <span class="n">listened_artists</span><span class="p">,</span>
+      <span class="n">embedding_cols</span><span class="o">=</span><span class="p">[</span>
+          <span class="n">make_embedding_col</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="mi">35</span><span class="p">),</span>
+          <span class="c1"># make_embedding_col(&quot;tag&quot;, 3),</span>
+          <span class="c1"># make_embedding_col(&quot;peak_year&quot;, 2),</span>
+      <span class="p">],</span>
+      <span class="n">hidden_dims</span><span class="o">=</span><span class="p">[</span><span class="mi">35</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>making batch
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">softmax_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">8.</span><span class="p">,</span> <span class="n">num_iterations</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">AdagradOptimizer</span><span class="p">)</span>
+<span class="c1"># change iterations to 3000</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:tensorflow:From /usr/local/lib/python3.7/dist-packages/tensorflow/python/training/adagrad.py:143: calling Constant.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+ iteration 3000: train_loss=6.966783, test_loss=7.547706, test_precision_at_10=0.007220
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>({&#39;test_loss&#39;: 7.5477057, &#39;train_loss&#39;: 6.966783},
+ {&#39;test_precision_at_10&#39;: 0.007219926691102965})
+</pre></div>
+</div>
+<img alt="_images/softmax_18_2.png" src="_images/softmax_18_2.png" />
+</div>
+</div>
+<p>The train loss is higher than the loss seen in previous models. Precision does improve with more training, however it remains low, reaching a maximum value of 0.0072. Precision for recommender systems is generally low as we are predicting items users might be interested in out of a large set of items. It is hard to tell if a user would actually be interested in an item if it is never presented to them as an option.</p>
+</div>
+<div class="section" id="inspect-embeddings">
+<h3><span class="section-number">3.5.3. </span>Inspect Embeddings<a class="headerlink" href="#inspect-embeddings" title="Permalink to this headline">¶</a></h3>
+<p>We can inspect the artist embeddings as we did for the previous models. Note that in this case, the artist embeddings are used at the same time as input embeddings (for the bag of words representation of the user listening history), and as softmax weights.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">artist_neighbors</span><span class="p">(</span><span class="n">softmax_model</span><span class="p">,</span> <span class="s2">&quot;Coldplay&quot;</span><span class="p">,</span> <span class="n">DOT</span><span class="p">)</span>
+<span class="n">artist_neighbors</span><span class="p">(</span><span class="n">softmax_model</span><span class="p">,</span> <span class="s2">&quot;Coldplay&quot;</span><span class="p">,</span> <span class="n">COSINE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nearest neighbors of : Coldplay.
+[Found more than one matching artist. Other candidates: Jay-Z &amp; Coldplay, Coldplay/U2]
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>dot score</th>
+      <th>names</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>59</th>
+      <td>36.792</td>
+      <td>Coldplay</td>
+    </tr>
+    <tr>
+      <th>223</th>
+      <td>33.686</td>
+      <td>The Killers</td>
+    </tr>
+    <tr>
+      <th>184</th>
+      <td>32.686</td>
+      <td>Muse</td>
+    </tr>
+    <tr>
+      <th>527</th>
+      <td>31.506</td>
+      <td>Oasis</td>
+    </tr>
+    <tr>
+      <th>214</th>
+      <td>31.132</td>
+      <td>Red Hot Chili Peppers</td>
+    </tr>
+    <tr>
+      <th>201</th>
+      <td>29.505</td>
+      <td>Arctic Monkeys</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nearest neighbors of : Coldplay.
+[Found more than one matching artist. Other candidates: Jay-Z &amp; Coldplay, Coldplay/U2]
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cosine score</th>
+      <th>names</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>59</th>
+      <td>1.000</td>
+      <td>Coldplay</td>
+    </tr>
+    <tr>
+      <th>1366</th>
+      <td>0.950</td>
+      <td>Snow Patrol</td>
+    </tr>
+    <tr>
+      <th>223</th>
+      <td>0.939</td>
+      <td>The Killers</td>
+    </tr>
+    <tr>
+      <th>310</th>
+      <td>0.925</td>
+      <td>Alanis Morissette</td>
+    </tr>
+    <tr>
+      <th>527</th>
+      <td>0.923</td>
+      <td>Oasis</td>
+    </tr>
+    <tr>
+      <th>165</th>
+      <td>0.913</td>
+      <td>Stereophonics</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="conclusion">
+<h2><span class="section-number">3.6. </span>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>These recommendations are highly relevant. Although the loss is hihger,in my opinion the recommendations are superior to the recommendations we were receiving using the previous matrix factorization moodels. We have expanded on our previous work by building a softmax model that is capable of making relevant high quality recommendations.</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="matrix_fact.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">2. </span>Matrix Factorization</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="lightgcn_mod.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">4. </span>LightGCN</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Niamh Murphy<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>
