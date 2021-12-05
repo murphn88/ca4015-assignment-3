@@ -1,12 +1,12 @@
 # Table of contents
 # Learn more at https://jupyterbook.org/customize/toc.html
 
-root: data_description
+root: introd
 format: jb-book
 defaults:
   numbered: true
 parts:
-- caption: Get started
+- caption: Methodology
   chapters:
   - file: data_description
   - file: matrix_fact
@@ -14,3 +14,4 @@ parts:
   - file: lightgcn_mod
   - file: content_based
   - file: Conclusion
+  - file: bib
