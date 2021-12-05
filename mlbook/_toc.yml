@@ -1,0 +1,16 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+root: data_description
+format: jb-book
+defaults:
+  numbered: true
+parts:
+- caption: Get started
+  chapters:
+  - file: data_description
+  - file: matrix_fact
+  - file: softmax
+  - file: lightgcn_mod
+  - file: content_based
+  - file: Conclusion
