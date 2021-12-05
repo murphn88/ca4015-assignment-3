@@ -35,9 +35,11 @@ Content based methods can often explain the observed user-item iterations.
 
 The objective of this project is to develop a recommender system for music artists.
 To do this we will use the Last.fm dataset, which can be accessed from [here](https://grouplens.org/datasets/hetrec-2011/).
+The dataset contains 92,800 artist listening records from 1892 users, as well as information on social networking and tagging, from [Last.fm](http://www.last.fm ) online music system.
+We want to be able to make relevant and useful recommendations based on users' listening history and activity.
 
 
-<img alt="artist recommender" height="300" src="C:\Users\User\Desktop\mlbook\music_recomm.png" width="400"/>
+<img alt="artist recommender" height="300" src="https://github.com/murphn88/ca4015-assignment-3/blob/main/book/music_recomm.png?raw=true" width="400"/>
 
 
 
