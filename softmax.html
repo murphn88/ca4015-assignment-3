@@ -264,8 +264,8 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#build-a-softmax-model-train-it-and-inspect-its-embeddings">
-   3.5. Build a softmax model, train it, and inspect its embeddings.
+  <a class="reference internal nav-link" href="#build-train-and-inspect-embeddings">
+   3.5. Build, train and inspect embeddings.
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
@@ -454,11 +454,9 @@ The model will take as input a feature vector <span class="math notranslate nohi
 </div>
 <div class="section" id="loss-function">
 <h2><span class="section-number">3.4. </span>Loss function<a class="headerlink" href="#loss-function" title="Permalink to this headline">¶</a></h2>
-<p>Tthe softmax model maps the input features <span class="math notranslate nohighlight">\(x\)</span> to a user embedding <span class="math notranslate nohighlight">\(\psi(x) \in \mathbb R^d\)</span>, where <span class="math notranslate nohighlight">\(d\)</span> is the embedding dimension. This vector is then multiplied by an artist embedding matrix <span class="math notranslate nohighlight">\(V \in \mathbb R^{m \times d}\)</span> (where <span class="math notranslate nohighlight">\(m\)</span> is the number of artists), and the final output of the model is the softmax of the product
-$<span class="math notranslate nohighlight">\(
-\hat p(x) = \text{softmax}(\psi(x) V^\top).
-\)</span><span class="math notranslate nohighlight">\(
-Given a target label \)</span>y<span class="math notranslate nohighlight">\(, if we denote by \)</span>p = 1_y<span class="math notranslate nohighlight">\( a one-hot encoding of this target label, then the loss is the cross-entropy between \)</span>\hat p(x)<span class="math notranslate nohighlight">\( and \)</span>p$.</p>
+<p>The softmax model maps the input features <span class="math notranslate nohighlight">\(x\)</span> to a user embedding <span class="math notranslate nohighlight">\(\psi(x) \in \mathbb R^d\)</span>, where <span class="math notranslate nohighlight">\(d\)</span> is the embedding dimension. This vector is then multiplied by an artist embedding matrix <span class="math notranslate nohighlight">\(V \in \mathbb R^{m \times d}\)</span> (where <span class="math notranslate nohighlight">\(m\)</span> is the number of artists), and the final output of the model is the softmax of the product:</p>
+<p><span class="math notranslate nohighlight">\(\hat p(x) = \text{softmax}(\psi(x) V^\top)\)</span></p>
+<p>Given a target label <span class="math notranslate nohighlight">\(y\)</span>, if we denote by <span class="math notranslate nohighlight">\(p = 1_y\)</span> a one-hot encoding of this target label, then the loss is the cross-entropy between <span class="math notranslate nohighlight">\(\hat p(x)\)</span> and <span class="math notranslate nohighlight">\(p\)</span>.</p>
 <p>We will write a function that takes tensors representing the user embeddings  ψ(x) , movie embeddings  V , target label  y , and return the cross-entropy loss.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -489,10 +487,10 @@ Given a target label \)</span>y<span class="math notranslate nohighlight">\(, if
 </div>
 </div>
 </div>
-<div class="section" id="build-a-softmax-model-train-it-and-inspect-its-embeddings">
-<h2><span class="section-number">3.5. </span>Build a softmax model, train it, and inspect its embeddings.<a class="headerlink" href="#build-a-softmax-model-train-it-and-inspect-its-embeddings" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="build-train-and-inspect-embeddings">
+<h2><span class="section-number">3.5. </span>Build, train and inspect embeddings.<a class="headerlink" href="#build-train-and-inspect-embeddings" title="Permalink to this headline">¶</a></h2>
 <p>We are now ready to build a softmax CFModel. The architecture of the model is defined in the function <code class="docutils literal notranslate"><span class="pre">create_user_embeddings</span></code> and illustrated in the figure below. The input embeddings (artistID, tag_1 and peak_year) are concatenated to form the input layer, then we have hidden layers with dimensions specified by the <code class="docutils literal notranslate"><span class="pre">hidden_dims</span></code> argument. Finally, the last hidden layer is multiplied by the artist embeddings to obtain the logits layer. For the target label, we will use a randomly-sampled artistID from the list of artists the user has listened to.</p>
-<p><img alt="Softmax model" src=".%5Csoftmax_schematic.png" /></p>
+<p><img alt="Softmax model" src="https://github.com/murphn88/ca4015-assignment-3/blob/main/book/softmax_schematic.png?raw=true" /></p>
 <div class="section" id="build">
 <h3><span class="section-number">3.5.1. </span>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h3>
 <div class="cell docutils container">
